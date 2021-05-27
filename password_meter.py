@@ -14,6 +14,9 @@ global lowercase_flag
 global uppercase_flag
 global number_flag
 global space_flag
+global common_flag
+global personal_flag
+global reuse_flag
 
 global special_length
 global lower_length
@@ -148,7 +151,43 @@ def check_for_spaces(password):
         space_flag = True;
 
     return
+
+def check_common_pwd_list(password):
+    global common_flag
+
+    common_flag = False
+
+    with open("10-million-password-list-top-1000000.txt") as f:
+        Lines = f.read().splitlines() 
+
+    for line in Lines:
+        
+        if(line == password):
+
+            # if we find the password in the list of common passwords, set flag to True
+            common_flag = True
+            return
+
+def check_usage(password):
+
+    global personal_flag
+    global reuse_flag
+
+    # initialize flags to False
+    personal_flag = False
+    reuse_flag = False
+
+    personal_info = input("Does your password contain personal information, such as birthdays, children/pet names, maiden names, or your school's name? (y/n)\n")
     
+    reuse_password = input("Do you use this same password across multiple platforms? (y/n)\n")
+
+    if(personal_info.lower() == 'y'):
+        personal_flag = True   
+    
+    if(reuse_password.lower() == 'y'):
+        reuse_flag = True
+
+    print("\n")
 
 def check_all_flags():
 
@@ -169,8 +208,18 @@ def check_all_flags():
 
     if(space_flag) == False:
         print("The password:", password, "includes spaces, thus it's a invalid password\n")
+    
+    if(common_flag) == True:
+        print("The password:", password, "was found in the list of common passwords. Please change your password to a more secure password.\n")
+    
+    if(personal_flag) == True:
+        print("The password:", password, "contains personal information which may be easily found on the internet. Hackers may be able to guess your password after finding this information. \nPlease do not include easily found information in your password.\n")
+    
+    if(reuse_flag) == True:
+        print("The password:", password, "is reused across multiple sites, meaning that if one account is breached, many more can be easily breached. Please do not use the same password across multiple websites.\n ")
+
         
-    if((length_flag == 1) and (special_flag == 1) and (lowercase_flag == 1) and (uppercase_flag == 1) and (number_flag == 1) and (space_flag == 1)):
+    if((length_flag == 1) and (special_flag == 1) and (lowercase_flag == 1) and (uppercase_flag == 1) and (number_flag == 1) and (space_flag == 1) and (common_flag == False)):
         print("The password:", password, "is relatively strong and secure\n")
               
 def check_strength(password):
@@ -207,6 +256,8 @@ check_for_lowercase(password)
 check_for_uppercase(password)
 check_for_numbers(password)
 check_for_spaces(password)
+check_common_pwd_list(password)
+check_usage(password)
 
 check_all_flags()
 check_strength(password)
