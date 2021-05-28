@@ -22,8 +22,12 @@ global special_length
 global lower_length
 global upper_length
 global number_length
+global pass_length
 
 def length_of_password(password):
+    
+    global pass_length
+
     pass_length = len(password)
     print("password length is:", pass_length)
     print("\n")
@@ -224,28 +228,47 @@ def check_all_flags():
               
 def check_strength(password):
 
-    #if(special_length) >= 1:
+    # Variable assignment
+    Total_Strength = 94 ** pass_length
 
-        #temporary print statement indicating we are now inside the strength meter to calculate the actual strength/time it would take to relatively crack
-        #print("special_length\n")
-        
-    #if(lower_length) >= 1:
 
-        #temporary print statement indicating we are now inside the strength meter to calculate the actual strength/time it would take to relatively crack
-        #print("lower_length\n")
 
-    #if(upper_length) >= 1:
+    # Classes: Very Weak, Weak, Moderate, Moderatly Strong, Strong, Very Strong
+    #             2^60     2^61  2^62           2^63         2 ^ 64,  2^65
 
-        #temporary print statement indicating we are now inside the strength meter to calculate the actual strength/time it would take to relatively crack
-        #print("upper_length\n")
 
-    #if(number_length) >= 1:
 
-        #temporary print statement indicating we are now inside the strength meter to calculate the actual strength/time it would take to relatively crack
-        #print("number_length\n")
-        
+    # Very Weak
+    if(Total_Strength) >= 2**60 and Total_Strength <= 2**61:
+        print("The password:", password, "is very weak.")
 
-    return
+    #  Weak
+    elif(Total_Strength) >= 2**61 and Total_Strength <= 2**62:
+        print("The password:", password, "is weak.")
+
+    # Moderate
+    elif(Total_Strength) >= 2**62 and Total_Strength <= 2**63:
+        print("The password:", password, "is moderate.")
+
+    # Moderatly Strong
+    elif(Total_Strength) >= 2**63 and Total_Strength <= 2**64:
+        print("The password:", password, "is moderatly strong.")
+
+    # Very Strong
+    elif(Total_Strength) >= 2**65:
+        print("The password:", password, "is very strong.")
+
+    # Less than very weak and should not be allowed/
+    else: 
+        print("The password:", password, "is to weak to be allowed to use.")
+
+
+    # Prints a Warning that Using this can make the password weaker
+    if(personal_flag) == True or (reuse_flag) == True:
+        # Password is a weak since it is easily obtainable info or passwords that have been used across multiple accounts give the account less security
+        print("WARNING! Reusing or having personal information in a password can make it more easy to crack.\n")
+
+    return 
 
 password = input("\nEnter in a password to test: ")
 
