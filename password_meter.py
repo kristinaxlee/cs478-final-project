@@ -195,6 +195,8 @@ def check_usage(password):
 
 def check_all_flags():
 
+    print("--- Password Checks ---")
+
     if(length_flag) == False:
         print("The password:", password, "is short, thus it's relatively weak\n")
 
@@ -222,22 +224,44 @@ def check_all_flags():
     if(reuse_flag) == True:
         print("The password:", password, "is reused across multiple sites, meaning that if one account is breached, many more can be easily breached. Please do not use the same password across multiple websites.\n ")
 
-        
-    if((length_flag == 1) and (special_flag == 1) and (lowercase_flag == 1) and (uppercase_flag == 1) and (number_flag == 1) and (space_flag == 1) and (common_flag == False)):
-        print("The password:", password, "is relatively strong and secure\n")
+    # password passes all of the checks
+    if((length_flag == 1) and (special_flag == 1) and (lowercase_flag == 1) and (uppercase_flag == 1) and (number_flag == 1) and (space_flag == 1) and (common_flag == False) and (personal_flag == False) and (reuse_flag) == False):
+        print("The password:", password, "passes all of the checks.\n")
+        check_strength(password)
+    
+    # if the password is found in the common password list, has personal information, or is reused, the password is automatically weak.
+    elif((common_flag == True) or (personal_flag == True) or (reuse_flag) == True):
+        print("The password:", password, "does not pass all of the checks.\n")
+        print("This password is relatively weak. Please change your password to be more secure.")
+
+    # password doesn't pass all of the checks, but isn't reused, doesn't contain personal info, and isn't found in the common password list
+    else:
+        print("The password:", password, "does not pass all of the checks.\n")
+        check_strength(password)
               
 def check_strength(password):
 
-    # Variable assignment
-    Total_Strength = 94 ** pass_length
+    # Calculate the number of available characters that the user used
+    numChars = 0
+    if(lowercase_flag == True):
+        numChars += 26
+    if(uppercase_flag == True):
+        numChars += 26
+    if(number_flag == True):
+        numChars += 10
+    if(special_flag == True):
+        numChars += 33
 
+    # Variable assignment
+    # Formula: (number of available characters)^length of password
+    Total_Strength = numChars ** pass_length
 
 
     # Classes: Very Weak, Weak, Moderate, Moderatly Strong, Strong, Very Strong
     #             2^60     2^61  2^62           2^63         2 ^ 64,  2^65
 
 
-
+    print(" --- Calculating entropy ---")
     # Very Weak
     if(Total_Strength) >= 2**60 and Total_Strength <= 2**61:
         print("The password:", password, "is very weak.")
@@ -250,9 +274,9 @@ def check_strength(password):
     elif(Total_Strength) >= 2**62 and Total_Strength <= 2**63:
         print("The password:", password, "is moderate.")
 
-    # Moderatly Strong
+    # Moderately Strong
     elif(Total_Strength) >= 2**63 and Total_Strength <= 2**64:
-        print("The password:", password, "is moderatly strong.")
+        print("The password:", password, "is moderately strong.")
 
     # Very Strong
     elif(Total_Strength) >= 2**65:
@@ -260,7 +284,7 @@ def check_strength(password):
 
     # Less than very weak and should not be allowed/
     else: 
-        print("The password:", password, "is to weak to be allowed to use.")
+        print("The password:", password, "is too weak to be allowed to use.")
 
 
     # Prints a Warning that Using this can make the password weaker
@@ -283,7 +307,7 @@ check_common_pwd_list(password)
 check_usage(password)
 
 check_all_flags()
-check_strength(password)
+
 
 
 
