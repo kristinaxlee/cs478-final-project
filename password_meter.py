@@ -241,9 +241,20 @@ def check_all_flags():
               
 def check_strength(password):
 
+    # Calculate the number of available characters that the user used
+    numChars = 0
+    if(lowercase_flag == True):
+        numChars += 26
+    if(uppercase_flag == True):
+        numChars += 26
+    if(number_flag == True):
+        numChars += 10
+    if(special_flag == True):
+        numChars += 33
+
     # Variable assignment
     # Formula: (number of available characters)^length of password
-    Total_Strength = 95 ** pass_length
+    Total_Strength = numChars ** pass_length
 
 
     # Classes: Very Weak, Weak, Moderate, Moderatly Strong, Strong, Very Strong
